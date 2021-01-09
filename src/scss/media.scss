@@ -1,0 +1,100 @@
+/// inspired by https://github.com/eduardoboucas/include-media
+
+@use "sass:map";
+@use "sass:meta";
+@use "sass:list";
+
+// @mixin config
+$breakpoints: null;
+
+@mixin config($breakpoints) {
+    $breakpoints: $breakpoints !global;
+}
+
+@mixin media($start, $end: null) {
+    @media only screen {
+        $min-width: map.get($breakpoints, $start);
+
+        @media (min-width: $min-width) {
+            @content;
+        }
+
+        @if ($end) {
+            $max-width: map.get($breakpoints, $end);
+
+            @media (max-width: $max-width) {
+                @content;
+            }
+        }
+    }
+}
+
+@mixin breakpoint-visualizer {
+    @if ($breakpoints == null) {
+        @error "Please set $breakpoints with `@include config(...)`";
+    }
+
+    @if (meta.type-of($breakpoints) != map) {
+        @error "Expect $breakpoints to be a map, given #{meta.type-of($breakpoints)}: #{$breakpoints}";
+    }
+
+    // NOTICE the quotes for second parameter of `$selector: if(&, "&", ":root")`.
+    // Without qoutes:
+    // ```sass
+    // $selector: if(&, &, ":root")
+    // .block {
+    //     // here $select will be ".block"(instead of "&") or ":root"
+    //     #{$selector} {}
+    // }
+    // ```
+    // Result:
+    // ```sass
+    // .block { }
+    // .block .block {}
+    // //     ^^^^^^ $selector is convert to a child
+    // ```
+    $selector: if(&, "&", ":root");
+
+    #{$selector} {
+        position: relative;
+    }
+
+    #{$selector}::before {
+        content: "Too small";
+
+        @if ($selector == ":root") {
+            position: absolute;
+            z-index: 9999;
+            right: 0;
+            bottom: 0;
+            padding: 0 .5em;
+        }
+
+        background-color: rgba(0, 0, 0, .25);
+        color: rgba(255, 255, 255, .85);
+        font-size: 2rem;
+        pointer-events: none;
+
+        // overwrite default-style
+        @content;
+
+        // show breakpoints' name and value
+        $bps: map.keys($breakpoints);
+        $widths: map.values($breakpoints);
+
+        @each $bp, $min in $breakpoints {
+            @include media($bp) {
+                $content: "#{$bp}: #{$min}";
+
+                $index: list.index($bps, $bp);
+
+                @if ($index < list.length($widths)) {
+                    $max: list.nth($widths, $index+1);
+                    $content: "#{$content}-#{$max}";
+                }
+
+                content: $content;
+            }
+        }
+    }
+}

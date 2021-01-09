@@ -1,0 +1,35 @@
+@use './scss/media.scss';
+
+$breakpoints: (
+    "first": 320px,
+    "second": 480px,
+    "third": 760px,
+    "fourth": 1024px,
+    "fifth": 1440px
+);
+
+@include media.config($breakpoints);
+@include media.breakpoint-visualizer;
+
+*,
+::before,
+::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.breakpoint-visualizer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: rgb(75, 110, 185);
+
+    @include media.config($breakpoints);
+
+    @include media.breakpoint-visualizer {
+        background-color: transparent;
+        color: #d6b85e;
+    }
+}
