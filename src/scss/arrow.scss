@@ -1,0 +1,21 @@
+@use 'sass:math';
+
+@mixin arrow($thickness: 8px, $length: 44px, $wing-length: 24px, $color: #000) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: $length;
+    height: $thickness;
+    margin: $wing-length / math.sqrt(2) - $thickness / 2 0;
+    margin-right: (math.sqrt(2) - 1) * $wing-length / 2;
+    background-color: $color;
+
+    &::after {
+        content: '';
+        display: inline-block;
+        padding: ($wing-length - $thickness) / 2;
+        transform: rotate(-45deg);
+        border: solid $color;
+        border-width: 0 $thickness $thickness 0;
+    }
+}

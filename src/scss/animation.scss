@@ -1,0 +1,37 @@
+@use 'sass:string';
+
+@mixin new-animation($property, $from, $to, $args...) {
+    $name: trans-#{string.unique-id()};
+
+    @keyframes #{$name} {
+        from {
+            #{$property}: #{$from};
+        }
+
+        to {
+            #{$property}: #{$to};
+        }
+    }
+
+    animation: #{$name} #{$args};
+}
+
+@mixin stretch($from, $to, $max: 100%) {
+    // `min($from, $max)` might produce a error:
+    // `Error: 6rem and 100% have incompatible units.`
+    // Because:
+    // > SASS has its own `min()`, `max()` function.
+    // > As soon as any part of the call contains a
+    // > SassScript feature like variables or function
+    // > calls, though, it’s parsed as a call to Sass’s
+    // > core min() or max() function instead of css ones
+    @keyframes stretch {
+        from {
+            width: min(#{$from}, #{$max});
+        }
+
+        to {
+            width: min(#{$to}, #{$max});
+        }
+    }
+}

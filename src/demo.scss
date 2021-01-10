@@ -1,4 +1,8 @@
 @use './scss/media.scss';
+@use 'sass:math';
+@use 'sass:string';
+@use './scss/animation.scss';
+@use './scss/arrow.scss';
 
 $breakpoints: (
     "first": 320px,
@@ -11,6 +15,7 @@ $breakpoints: (
 @include media.config($breakpoints);
 @include media.breakpoint-visualizer;
 
+// reset
 *,
 ::before,
 ::after {
@@ -20,16 +25,39 @@ $breakpoints: (
 }
 
 .breakpoint-visualizer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background-color: rgb(75, 110, 185);
-
     @include media.config($breakpoints);
 
     @include media.breakpoint-visualizer {
         background-color: transparent;
         color: #d6b85e;
     }
+}
+
+.full-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: rgb(75, 110, 185);
+}
+
+.title {
+    color: #ccc;
+    font-size: 2.8rem;
+}
+
+.arrow {
+    @include arrow.arrow($color: #ccc);
+
+    &--left {
+        transform: rotate(180deg);
+    }
+}
+
+.arrow-wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin: 1.4rem 0;
+    @include animation.new-animation(width, min(40rem, 100%), 10rem, 1.4s ease-out infinite);
 }
