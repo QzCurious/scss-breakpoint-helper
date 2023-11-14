@@ -1,11 +1,15 @@
 {
+  "name": "scss-breakpoint-visualizer",
+  "description": "A tiny, simple breakpoint visualizer for scss",
+  "author": "QzCurious",
+  "version": "0.0.1",
+  "source": "src/index.html",
   "scripts": {
-    "start": "parcel src/index.html",
-    "build": "parcel build src/index.html --no-source-maps"
+    "dev": "parcel serve --port 31873",
+    "build": "parcel build"
   },
   "devDependencies": {
-    "cssnano": "^4.1.10",
-    "parcel-bundler": "^1.12.4",
-    "sass": "^1.32.2"
+    "@parcel/transformer-sass": "2.10.2",
+    "parcel": "^2.10.2"
   }
 }
