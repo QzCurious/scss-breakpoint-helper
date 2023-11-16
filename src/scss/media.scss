@@ -55,15 +55,11 @@ $breakpoints: null;
     // ```
     $selector: if(&, "&", ":root");
 
-    #{$selector} {
-        position: relative;
-    }
-
     #{$selector}::before {
         content: "Too small";
 
         @if ($selector == ":root") {
-            position: absolute;
+            position: fixed;
             z-index: 9999;
             right: 0;
             bottom: 0;
